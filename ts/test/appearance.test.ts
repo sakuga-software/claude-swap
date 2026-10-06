@@ -77,6 +77,9 @@ describe("TestClassify", () => {
 });
 
 describe("TestQueryTerminalBackground", () => {
+  // The Python tests skip where `termios` is missing. `queryTerminalBackground` returns null on win32.
+  const itTty = it.skipIf(process.platform === "win32");
+
   function fakeTty(chunks: Buffer[], { clock }: { clock?: () => number } = {}) {
     const fd = 42;
     const pending = [...chunks];
@@ -114,7 +117,7 @@ describe("TestQueryTerminalBackground", () => {
     return { reads, writes, selectTimeouts };
   }
 
-  it("test_waits_for_da1_after_complete_osc_reply", () => {
+  itTty("test_waits_for_da1_after_complete_osc_reply", () => {
     const osc = b("\x1b]11;rgb:1e1d/1e1d/1e1d\x07");
     const da1 = b("\x1b[?1;2c");
     const { reads, writes } = fakeTty([osc, da1]);
@@ -124,7 +127,7 @@ describe("TestQueryTerminalBackground", () => {
     expect(writes).toEqual([Buffer.concat([appearance.QUERY, appearance.DA1_QUERY]).toString("latin1")]);
   });
 
-  it("test_accepts_reply_delayed_beyond_old_150ms_window", () => {
+  itTty("test_accepts_reply_delayed_beyond_old_150ms_window", () => {
     const reply = b("\x1b]11;rgb:ffff/ffff/ffff\x07\x1b[?1;2c");
     const times = [0.0, 0.2, 0.2][Symbol.iterator]();
     const { selectTimeouts } = fakeTty([reply], { clock: () => times.next().value! });
@@ -134,7 +137,7 @@ describe("TestQueryTerminalBackground", () => {
     expect(selectTimeouts[0]).toBeCloseTo(0.8);
   });
 
-  it("test_da1_first_means_osc11_is_unsupported", () => {
+  itTty("test_da1_first_means_osc11_is_unsupported", () => {
     const da1 = b("\x1b[?62;1;2;6c");
     const { reads } = fakeTty([da1]);
 
@@ -144,7 +147,7 @@ describe("TestQueryTerminalBackground", () => {
     expect(appearance.classify(reply!)).toBeNull();
   });
 
-  it("test_accepts_da1_reply_without_parameters", () => {
+  itTty("test_accepts_da1_reply_without_parameters", () => {
     const da1 = b("\x1b[?c");
     const { reads } = fakeTty([da1]);
 
@@ -152,7 +155,7 @@ describe("TestQueryTerminalBackground", () => {
     expect(reads).toEqual([da1]);
   });
 
-  it("test_does_not_mistake_echoed_da1_query_for_reply", () => {
+  itTty("test_does_not_mistake_echoed_da1_query_for_reply", () => {
     const echoedQuery = appearance.DA1_QUERY;
     const osc = b("\x1b]11;rgb:0000/0000/0000\x07");
     const da1 = b("\x1b[?1;2c");
@@ -162,7 +165,7 @@ describe("TestQueryTerminalBackground", () => {
     expect(reads).toEqual([echoedQuery, osc, da1]);
   });
 
-  it("test_accepts_fragmented_da1_reply", () => {
+  itTty("test_accepts_fragmented_da1_reply", () => {
     const osc = b("\x1b]11;rgb:0000/0000/0000\x07");
     const fragments = [osc, b("\x1b[?"), b("62;1;2;6c")];
     const { reads } = fakeTty(fragments);

@@ -72,8 +72,13 @@ export class EngineHarness {
 
   constructor(home: string | null = null, settings: Partial<AutoSwitchSettings> = {}) {
     this.home = home ?? testHome();
-    const saved = { HOME: process.env.HOME, XDG_DATA_HOME: process.env.XDG_DATA_HOME };
+    const saved = {
+      HOME: process.env.HOME,
+      USERPROFILE: process.env.USERPROFILE,
+      XDG_DATA_HOME: process.env.XDG_DATA_HOME,
+    };
     process.env.HOME = this.home;
+    process.env.USERPROFILE = this.home;
     process.env.XDG_DATA_HOME = path.join(this.home, ".local", "share");
     try {
       this.switcher = new ClaudeAccountSwitcher();
