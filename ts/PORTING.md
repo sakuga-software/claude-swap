@@ -148,6 +148,62 @@ equivalent.
 - Use `vi.stubEnv` for environment variables and `vi.useFakeTimers` /
   `vi.setSystemTime` for the clock.
 
+## Differences from the Python version
+
+Keep this list current. A port that adds a difference adds a line here.
+
+### The two versions must not run at the same time on one store
+
+- `FileLock` (`locking.ts`) is a directory at `<path>.d`, not an `flock`.
+  The Python and TypeScript locks do not see each other.
+- The LaunchAgent label `com.cswap.menubar` is the same in both versions.
+  Uninstall one service before you install the other.
+
+### Event loop
+
+- A Python thread waits on a lock while another thread holds it. In
+  TypeScript, the refresh lane holds `lockFile` across a network `await`. A
+  synchronous mutator cannot wait for it without a block of the event loop.
+  Thus `enterFileLock` throws `LockError` at once if a task of this process
+  holds the lock, and the TUI calls `whenNoLockHeldInProcess()` before each
+  action.
+- The `claude_locks` toucher is a timer. It runs only while the event loop
+  is free. A synchronous body must not hold a Claude Code lock for more than
+  10 s (config) or 60 s (credentials).
+- The active-read verdict is per async call chain (`AsyncLocalStorage`), not
+  per thread.
+
+### Platform gaps
+
+- Windows: Node does not start a `.cmd` shim without a shell. The `claude`
+  probe reports "unreachable" and `cswap run` fails if `claude` is a `.cmd`.
+- Windows: the keyring-to-files migration is a no-op. Node has no Credential
+  Manager binding. A Python run on the same store can still do it.
+- macOS: the keyring-to-security migration reads the old items with the
+  `security` CLI and leaves them in place. `cswap purge` removes them.
+- The terminal background query uses raw mode, not cbreak, for at most 1 s.
+
+### Distribution
+
+- The npm package is `@sakuga-software/claude-swap`. It is not published yet.
+- `cswap upgrade` runs `npm i -g` or `pnpm add -g`. The update check caches
+  in `update_check_npm.json`, apart from the Python `update_check.json`.
+- The package exposes the CLI only. `src/index.ts` is not a build entry.
+- `cswap menubar` starts `CswapMenuBar.app`. Build it with
+  `menubar/scripts/bundle.sh`. No workflow ships a built app yet.
+- `launch_agent.resolveProgram()` falls back to `cswap` on `PATH`. If you
+  install the service from a checkout and the Python `cswap` comes first on
+  `PATH`, the plist starts the Python version.
+
+### Output
+
+- A float with no fraction prints as an integer (`80`, not `80.0`) in JSON
+  files and in `--json` output. JSON readers see the same value.
+- `--version` prints the npm version (`0.27.0-beta.1`, not `0.27.0b1`).
+- Error text that includes a JavaScript error message differs from Python
+  (`Error: boom`, not `RuntimeError: boom`).
+- Help output has no colour. Python 3.14 colours it in a terminal.
+
 ## Commands
 
 ```sh

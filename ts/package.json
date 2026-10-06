@@ -22,8 +22,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "upstream:status": "tsx scripts/upstream-status.ts",
-    "upstream:mark": "tsx scripts/upstream-mark.ts",
-    "parity": "tsx scripts/parity.ts"
+    "upstream:mark": "tsx scripts/upstream-mark.ts"
   },
   "repository": {
     "type": "git",

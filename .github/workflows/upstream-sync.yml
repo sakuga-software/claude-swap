@@ -54,6 +54,8 @@ jobs:
           branch="upstream-sync/$(git rev-parse --short upstream/main)"
           if git ls-remote --exit-code --heads origin "$branch" >/dev/null; then
             echo "$branch exists already."
+            git fetch --quiet origin "$branch"
+            git switch "$branch"
             echo "branch=$branch" >> "$GITHUB_OUTPUT"
             exit 0
           fi

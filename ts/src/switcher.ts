@@ -233,8 +233,24 @@ async function whenIdle<T>(paths: readonly string[], acquire: () => T, timeoutS 
   }
 }
 
+/**
+ * Wait until no task of this process holds a `FileLock`, with the event loop free.
+ * Call it before a synchronous mutator that can run beside an async task, as the TUI does.
+ */
+export async function whenNoLockHeldInProcess(timeoutS = 30): Promise<void> {
+  const deadline = Date.now() + timeoutS * 1000;
+  while (heldInProcess.size > 0 && Date.now() < deadline) {
+    await new Promise((resolve) => setTimeout(resolve, 50));
+  }
+}
+
 /** Python `with FileLock(path):`. Throws `LockError` if the lock is not available. */
 function enterFileLock(lockPath: string): Held {
+  // A synchronous wait for a lock that an async task of this process holds
+  // blocks the event loop, so the holder can never release it. Fail at once.
+  if (heldInProcess.has(lockPath)) {
+    throw new LockError("Failed to acquire lock - another operation of this process holds it");
+  }
   const lock = new internals.FileLock(lockPath);
   lock.enter();
   markHeld(lockPath, 1);

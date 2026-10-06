@@ -15,6 +15,7 @@ import { SnapshotSource } from "../snapshot_source.js";
 import { EOFError } from "../support/input.js";
 import { fromisoformat } from "../support/py.js";
 import { SENTINEL_NOTES, lastSeenNote } from "../switcher/display.js";
+import { whenNoLockHeldInProcess } from "../switcher.js";
 import { internals as switcherInternals } from "../switcher/internals.js";
 import { SERVE_TTL_S } from "../usage_store.js";
 
@@ -72,6 +73,9 @@ function eofInput(): never {
  * through a stream that keeps the original `write` (see `tui/index.tsx`).
  */
 export async function runAction(fn: () => unknown): Promise<ActionResult> {
+  // The refresh lane can hold the account lock across a network call. The
+  // synchronous mutators cannot wait for it without a block of the event loop.
+  await whenNoLockHeldInProcess();
   let buf = "";
   const capture = (chunk: string | Uint8Array): boolean => {
     buf += typeof chunk === "string" ? chunk : Buffer.from(chunk).toString("utf8");
