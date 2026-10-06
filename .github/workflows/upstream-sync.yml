@@ -1,0 +1,111 @@
+name: Upstream sync
+
+# Merges realiti4/claude-swap into a branch and opens a PR that lists the
+# TypeScript files to port. See ts/PORTING.md.
+
+on:
+  schedule:
+    - cron: "0 6 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: upstream-sync
+
+jobs:
+  merge:
+    runs-on: ubuntu-latest
+    outputs:
+      branch: ${{ steps.merge.outputs.branch }}
+    env:
+      # A PR that GITHUB_TOKEN opens does not start other workflows.
+      # Set UPSTREAM_SYNC_TOKEN (a fine-grained PAT or an app token) to get CI on the sync PR.
+      GH_TOKEN: ${{ secrets.UPSTREAM_SYNC_TOKEN || github.token }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.UPSTREAM_SYNC_TOKEN || github.token }}
+      - uses: pnpm/action-setup@v4
+        with:
+          package_json_file: ts/package.json
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: ts/pnpm-lock.yaml
+      - run: pnpm install --frozen-lockfile
+        working-directory: ts
+
+      - name: Merge upstream into a sync branch
+        id: merge
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git remote add upstream https://github.com/realiti4/claude-swap.git
+          git fetch --quiet upstream main
+          if git merge-base --is-ancestor upstream/main HEAD; then
+            echo "Upstream is already merged."
+            exit 0
+          fi
+          branch="upstream-sync/$(git rev-parse --short upstream/main)"
+          if git ls-remote --exit-code --heads origin "$branch" >/dev/null; then
+            echo "$branch exists already."
+            git fetch --quiet origin "$branch"
+            git switch "$branch"
+            echo "branch=$branch" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          git switch -c "$branch"
+          git merge --no-edit upstream/main
+          git push origin "$branch"
+          echo "branch=$branch" >> "$GITHUB_OUTPUT"
+
+      - name: Open or update the sync PR
+        if: steps.merge.outputs.branch != ''
+        working-directory: ts
+        run: |
+          pnpm -s upstream:status --no-fetch --markdown > "$RUNNER_TEMP/body.md"
+          branch="${{ steps.merge.outputs.branch }}"
+          if gh pr view "$branch" >/dev/null 2>&1; then
+            gh pr edit "$branch" --body-file "$RUNNER_TEMP/body.md"
+          else
+            gh pr create --base main --head "$branch" \
+              --title "Sync upstream $(git rev-parse --short upstream/main)" \
+              --body-file "$RUNNER_TEMP/body.md"
+          fi
+
+  port:
+    needs: merge
+    if: needs.merge.outputs.branch != '' && vars.CLAUDE_PORT_ENABLED == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.merge.outputs.branch }}
+          fetch-depth: 0
+      - uses: pnpm/action-setup@v4
+        with:
+          package_json_file: ts/package.json
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: ts/pnpm-lock.yaml
+      - run: pnpm install --frozen-lockfile
+        working-directory: ts
+      - run: git remote add upstream https://github.com/realiti4/claude-swap.git && git fetch --quiet upstream main
+      - uses: anthropics/claude-code-action@v1
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          prompt: |
+            Follow the "Updating from upstream" section of ts/PORTING.md, steps 3 to 5,
+            for every stale file that `cd ts && pnpm upstream:status --no-fetch` lists.
+            Commit the port on the current branch and push it. Then post a comment on the
+            PR for branch ${{ needs.merge.outputs.branch }} that lists what you ported,
+            what you skipped, and why.
+          claude_args: >-
+            --allowedTools "Read,Edit,Write,Glob,Grep,Bash(pnpm:*),Bash(git:*),Bash(gh pr:*)"

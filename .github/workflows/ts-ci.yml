@@ -1,0 +1,45 @@
+name: TS CI
+
+on:
+  push:
+    branches: [main]
+    paths: ["ts/**", "menubar/**", ".github/workflows/ts-ci.yml"]
+  pull_request:
+    paths: ["ts/**", "menubar/**", ".github/workflows/ts-ci.yml"]
+
+defaults:
+  run:
+    working-directory: ts
+
+jobs:
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          package_json_file: ts/package.json
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: ts/pnpm-lock.yaml
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm typecheck
+      - run: pnpm test
+      - run: pnpm build
+
+  menubar:
+    runs-on: macos-latest
+    defaults:
+      run:
+        working-directory: menubar
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build the menu bar app
+        run: |
+          if [ -f Package.swift ]; then swift build -c release; else echo "menubar/ not ported yet"; fi
