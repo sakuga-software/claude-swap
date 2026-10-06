@@ -1,5 +1,7 @@
 # claude-swap
 
+> **This is the [sakuga-software](https://github.com/sakuga-software/claude-swap) fork.** It adds a TypeScript rewrite of [realiti4/claude-swap](https://github.com/realiti4/claude-swap): the CLI and dashboard in [`ts/`](ts/README.md), and a native macOS menu bar app in [`menubar/`](menubar). The commands below are the same in both versions. For the TypeScript install, see [`ts/README.md`](ts/README.md). The Python sources stay here unchanged and follow upstream.
+
 Multi-account switcher for Claude Code. Easily switch between multiple Claude accounts without logging out, or let it switch for you before you hit a rate limit. Track usage for every account in a live dashboard, and run accounts in parallel. Works with both the Claude Code CLI and the VS Code extension.
 
 ## Installation
