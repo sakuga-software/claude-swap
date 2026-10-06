@@ -23,6 +23,10 @@ source goes in `ts/src/support/`. The manifest does not track that directory.
 upstream owns.** If upstream owns no file at a path, `git merge upstream/main`
 cannot conflict with it. That is the base of the update method below.
 
+One exception: the root `README.md` starts with a notice about the fork. It
+is one paragraph below the title. If upstream changes its title line, keep
+the notice when you resolve the merge.
+
 ## Updating from upstream
 
 Each manifest entry records `ported`, the upstream commit that the TypeScript
