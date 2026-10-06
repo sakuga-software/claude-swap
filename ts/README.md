@@ -10,7 +10,15 @@ A TypeScript port of [claude-swap](https://github.com/realiti4/claude-swap), the
 
 ## Install
 
-The npm package `@sakuga-software/claude-swap` is not published yet. Install from a checkout:
+```sh
+npm i -g @sakuga-software/claude-swap@beta     # or: pnpm add -g @sakuga-software/claude-swap@beta
+```
+
+This installs `cswap` and `claude-swap`. The versions are pre-releases for now, so the `@beta` tag is necessary: `cswap upgrade` follows the `latest` tag, which starts with the first stable release.
+
+Check which one you run with `cswap --version`. The TypeScript version prints an npm version such as `0.27.0-beta.1`; the Python version prints `0.27.0b1`. If both are installed, the first one on your `PATH` wins.
+
+From a checkout:
 
 ```sh
 git clone https://github.com/sakuga-software/claude-swap.git
@@ -18,15 +26,6 @@ cd claude-swap/ts
 pnpm install
 pnpm build
 npm link                  # puts `cswap` and `claude-swap` on your PATH
-```
-
-Check which one you run with `cswap --version`. The TypeScript version prints an npm version such as `0.27.0-beta.1`; the Python version prints `0.27.0b1`. If both are installed, the first one on your `PATH` wins.
-
-After the package is published:
-
-```sh
-npm i -g @sakuga-software/claude-swap     # or: pnpm add -g @sakuga-software/claude-swap
-cswap upgrade                             # later updates
 ```
 
 ## First run on a machine that has the Python version
@@ -68,6 +67,14 @@ pnpm build && node dist/cli.js --help
 The test suite is the pytest suite of the Python version, ported test by test with the same names. It runs in an isolated `HOME`. A guard stops any test that tries to write the real account store, and the setup blocks the network and replaces the Keychain.
 
 `ts-ci.yml` runs typecheck, tests and build on Linux, macOS and Windows, and builds the menu bar app on macOS.
+
+## Release
+
+1. Set `version` in `package.json` and merge it to `main`.
+2. Publish by hand from `ts/`: `npm publish --tag beta` for a pre-release, `npm publish` for a stable version. `prepack` builds `dist/` first.
+3. Or push the tag `ts-v<version>`. The `Publish to npm` workflow checks that the tag matches `package.json`, runs the tests and publishes with provenance. It needs the `NPM_TOKEN` repository secret.
+
+A GitHub release is not the trigger, because a release also starts the PyPI workflow that comes from upstream.
 
 ## Stay in sync with upstream
 
