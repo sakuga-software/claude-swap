@@ -1,0 +1,47 @@
+{
+  "name": "@sakuga-software/claude-swap",
+  "version": "0.27.0-beta.1",
+  "description": "Multi-account switcher for Claude Code (TypeScript port)",
+  "license": "MIT",
+  "type": "module",
+  "bin": {
+    "cswap": "dist/cli.js",
+    "claude-swap": "dist/cli.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "engines": {
+    "node": ">=22.15"
+  },
+  "packageManager": "pnpm@11.17.0",
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsx src/main.ts",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "upstream:status": "tsx scripts/upstream-status.ts",
+    "upstream:mark": "tsx scripts/upstream-mark.ts",
+    "parity": "tsx scripts/parity.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sakuga-software/claude-swap.git",
+    "directory": "ts"
+  },
+  "dependencies": {
+    "commander": "^15.0.0",
+    "ink": "^8.0.0",
+    "react": "^19.3.0"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.4",
+    "@types/react": "^19.3.0",
+    "ink-testing-library": "^4.0.0",
+    "tsup": "^8.5.1",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2",
+    "vitest": "^5.0.3"
+  }
+}

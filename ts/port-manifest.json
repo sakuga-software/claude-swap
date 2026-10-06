@@ -1,0 +1,530 @@
+{
+  "$comment": "Maps each upstream file to its TypeScript counterpart. `ported` is the upstream commit that the counterpart matches; null means not ported yet. Update it with `pnpm upstream:mark`, never by hand.",
+  "upstream": {
+    "remote": "upstream",
+    "url": "https://github.com/realiti4/claude-swap.git",
+    "branch": "main"
+  },
+  "ignore": [
+    ".github/FUNDING.yml",
+    ".github/ISSUE_TEMPLATE/*",
+    ".github/workflows/publish.yml",
+    ".gitignore",
+    ".python-version",
+    ".vscode/*",
+    "LICENSE",
+    "assets/*",
+    "uv.lock",
+    "tests/__init__.py"
+  ],
+  "files": {
+    ".github/workflows/ci.yml": {
+      "ts": [
+        ".github/workflows/ts-ci.yml"
+      ],
+      "ported": null
+    },
+    "pyproject.toml": {
+      "ts": [
+        "ts/package.json"
+      ],
+      "ported": null
+    },
+    "README.md": {
+      "ts": [
+        "ts/README.md"
+      ],
+      "ported": null
+    },
+    "src/claude_swap/__init__.py": {
+      "ts": [
+        "ts/src/index.ts",
+        "ts/src/version.ts"
+      ],
+      "ported": null
+    },
+    "src/claude_swap/__main__.py": {
+      "ts": [
+        "ts/src/main.ts"
+      ],
+      "ported": null
+    },
+    "src/claude_swap/appearance.py": {
+      "ts": [
+        "ts/src/appearance.ts"
+      ],
+      "ported": "3a4e5c14873eb5b32f182d55c68da98ac8c0db45"
+    },
+    "src/claude_swap/autoswitch.py": {
+      "ts": [
+        "ts/src/autoswitch.ts"
+      ],
+      "ported": null
+    },
+    "src/claude_swap/cache.py": {
+      "ts": [
+        "ts/src/cache.ts"
+      ],
+      "ported": "3a4e5c14873eb5b32f182d55c68da98ac8c0db45"
+    },
+    "src/claude_swap/claude_locks.py": {
+      "ts": [
+        "ts/src/claude_locks.ts"
+      ],
+      "ported": "3a4e5c14873eb5b32f182d55c68da98ac8c0db45"
+    },
+    "src/claude_swap/cli.py": {
+      "ts": [
+        "ts/src/cli.ts"
+      ],
+      "ported": null
+    },
+    "src/claude_swap/credentials.py": {
+      "ts": [
+        "ts/src/credentials.ts"
+      ],
+      "ported": "3a4e5c14873eb5b32f182d55c68da98ac8c0db45"
+    },
+    "src/claude_swap/exceptions.py": {
+      "ts": [
+        "ts/src/exceptions.ts"
+      ],
+      "ported": "3a4e5c14873eb5b32f182d55c68da98ac8c0db45"
+    },
+    "src/claude_swap/fsutil.py": {
+      "ts": [
+        "ts/src/fsutil.ts"
+      ],
+      "ported": "3a4e5c14873eb5b32f182d55c68da98ac8c0db45"
+    },
+    "src/claude_swap/json_output.py": {
+      "ts": [
+        "ts/src/json_output.ts"
+      ],
+      "ported": "3a4e5c14873eb5b32f182d55c68da98ac8c0db45"
+    },
+    "src/claude_swap/launch_agent.py": {
+      "ts": [
+        "ts/src/launch_agent.ts"
+      ],
+      "ported": "3a4e5c14873eb5b32f182d55c68da98ac8c0db45"
+    },
+    "src/claude_swap/locking.py": {
+      "ts": [
+        "ts/src/locking.ts"
+      ],
+      "ported": "3a4e5c14873eb5b32f182d55c68da98ac8c0db45"
+    },
+    "src/claude_swap/logging_config.py": {
+      "ts": [
+        "ts/src/logging_config.ts"
+      ],
+      "ported": "3a4e5c14873eb5b32f182d55c68da98ac8c0db45"
+    },
+    "src/claude_swap/macos_keychain.py": {
+      "ts": [
+        "ts/src/macos_keychain.ts"
+      ],
+      "ported": "3a4e5c14873eb5b32f182d55c68da98ac8c0db45"
+    },
+    "src/claude_swap/mappings.py": {
+      "ts": [
+        "ts/src/mappings.ts"
+      ],
+      "ported": "3a4e5c14873eb5b32f182d55c68da98ac8c0db45"
+    },
+    "src/claude_swap/menubar.py": {
+      "ts": [
+        "menubar/Sources/CswapMenuBarCore",
+        "menubar/Sources/CswapMenuBar",
+        "ts/src/menubar.ts"
+      ],
+      "ported": null
+    },
+    "src/claude_swap/migrations.py": {
+      "ts": [
+        "ts/src/migrations.ts"
+      ],
+      "ported": "3a4e5c14873eb5b32f182d55c68da98ac8c0db45"
+    },
+    "src/claude_swap/models.py": {
+      "ts": [
+        "ts/src/models.ts"
+      ],
+      "ported": "3a4e5c14873eb5b32f182d55c68da98ac8c0db45"
+    },
+    "src/claude_swap/oauth.py": {
+      "ts": [
+        "ts/src/oauth.ts"
+      ],
+      "ported": "3a4e5c14873eb5b32f182d55c68da98ac8c0db45"
+    },
+    "src/claude_swap/pace.py": {
+      "ts": [
+        "ts/src/pace.ts"
+      ],
+      "ported": "3a4e5c14873eb5b32f182d55c68da98ac8c0db45"
+    },
+    "src/claude_swap/paths.py": {
+      "ts": [
+        "ts/src/paths.ts"
+      ],
+      "ported": "3a4e5c14873eb5b32f182d55c68da98ac8c0db45"
+    },
+    "src/claude_swap/poll_policy.py": {
+      "ts": [
+        "ts/src/poll_policy.ts"
+      ],
+      "ported": "3a4e5c14873eb5b32f182d55c68da98ac8c0db45"
+    },
+    "src/claude_swap/printer.py": {
+      "ts": [
+        "ts/src/printer.ts"
+      ],
+      "ported": "3a4e5c14873eb5b32f182d55c68da98ac8c0db45"
+    },
+    "src/claude_swap/process_detection.py": {
+      "ts": [
+        "ts/src/process_detection.ts"
+      ],
+      "ported": "3a4e5c14873eb5b32f182d55c68da98ac8c0db45"
+    },
+    "src/claude_swap/session.py": {
+      "ts": [
+        "ts/src/session.ts"
+      ],
+      "ported": "3a4e5c14873eb5b32f182d55c68da98ac8c0db45"
+    },
+    "src/claude_swap/settings.py": {
+      "ts": [
+        "ts/src/settings.ts"
+      ],
+      "ported": "3a4e5c14873eb5b32f182d55c68da98ac8c0db45"
+    },
+    "src/claude_swap/snapshot_source.py": {
+      "ts": [
+        "ts/src/snapshot_source.ts"
+      ],
+      "ported": null
+    },
+    "src/claude_swap/switcher.py": {
+      "ts": [
+        "ts/src/switcher.ts",
+        "ts/src/switcher"
+      ],
+      "ported": "3a4e5c14873eb5b32f182d55c68da98ac8c0db45"
+    },
+    "src/claude_swap/transfer.py": {
+      "ts": [
+        "ts/src/transfer.ts"
+      ],
+      "ported": "3a4e5c14873eb5b32f182d55c68da98ac8c0db45"
+    },
+    "src/claude_swap/tui/__init__.py": {
+      "ts": [
+        "ts/src/tui/index.tsx"
+      ],
+      "ported": null
+    },
+    "src/claude_swap/tui/app.py": {
+      "ts": [
+        "ts/src/tui/app.tsx"
+      ],
+      "ported": null
+    },
+    "src/claude_swap/tui/autoview.py": {
+      "ts": [
+        "ts/src/tui/autoview.tsx"
+      ],
+      "ported": null
+    },
+    "src/claude_swap/tui/cswap.tcss": {
+      "ts": [
+        "ts/src/tui/theme.ts"
+      ],
+      "ported": null
+    },
+    "src/claude_swap/tui/dashboard.py": {
+      "ts": [
+        "ts/src/tui/dashboard.tsx"
+      ],
+      "ported": null
+    },
+    "src/claude_swap/tui/data.py": {
+      "ts": [
+        "ts/src/tui/data.tsx"
+      ],
+      "ported": null
+    },
+    "src/claude_swap/tui/modals.py": {
+      "ts": [
+        "ts/src/tui/modals.tsx"
+      ],
+      "ported": null
+    },
+    "src/claude_swap/tui/theme.py": {
+      "ts": [
+        "ts/src/tui/theme.tsx"
+      ],
+      "ported": null
+    },
+    "src/claude_swap/tui/widgets.py": {
+      "ts": [
+        "ts/src/tui/widgets.tsx"
+      ],
+      "ported": null
+    },
+    "src/claude_swap/update_check.py": {
+      "ts": [
+        "ts/src/update_check.ts"
+      ],
+      "ported": "3a4e5c14873eb5b32f182d55c68da98ac8c0db45"
+    },
+    "src/claude_swap/usage_store.py": {
+      "ts": [
+        "ts/src/usage_store.ts"
+      ],
+      "ported": "3a4e5c14873eb5b32f182d55c68da98ac8c0db45"
+    },
+    "tests/conftest.py": {
+      "ts": [
+        "ts/test/setup.ts",
+        "ts/test/helpers"
+      ],
+      "ported": "3a4e5c14873eb5b32f182d55c68da98ac8c0db45"
+    },
+    "tests/fixtures/sample_config.json": {
+      "ts": [
+        "ts/test/fixtures/sample_config.json"
+      ],
+      "ported": null
+    },
+    "tests/test_add_account_identity.py": {
+      "ts": [
+        "ts/test/add_account_identity.test.ts"
+      ],
+      "ported": "3a4e5c14873eb5b32f182d55c68da98ac8c0db45"
+    },
+    "tests/test_api_key_accounts.py": {
+      "ts": [
+        "ts/test/api_key_accounts.test.ts"
+      ],
+      "ported": "3a4e5c14873eb5b32f182d55c68da98ac8c0db45"
+    },
+    "tests/test_appearance.py": {
+      "ts": [
+        "ts/test/appearance.test.ts"
+      ],
+      "ported": "3a4e5c14873eb5b32f182d55c68da98ac8c0db45"
+    },
+    "tests/test_autoswitch.py": {
+      "ts": [
+        "ts/test/autoswitch.test.ts"
+      ],
+      "ported": null
+    },
+    "tests/test_cache.py": {
+      "ts": [
+        "ts/test/cache.test.ts"
+      ],
+      "ported": "3a4e5c14873eb5b32f182d55c68da98ac8c0db45"
+    },
+    "tests/test_claude_locks.py": {
+      "ts": [
+        "ts/test/claude_locks.test.ts"
+      ],
+      "ported": "3a4e5c14873eb5b32f182d55c68da98ac8c0db45"
+    },
+    "tests/test_cli.py": {
+      "ts": [
+        "ts/test/cli.test.ts"
+      ],
+      "ported": null
+    },
+    "tests/test_colour_cache_isolation.py": {
+      "ts": [
+        "ts/test/colour_cache_isolation.test.ts"
+      ],
+      "ported": "3a4e5c14873eb5b32f182d55c68da98ac8c0db45"
+    },
+    "tests/test_config_cli.py": {
+      "ts": [
+        "ts/test/config_cli.test.ts"
+      ],
+      "ported": null
+    },
+    "tests/test_credentials.py": {
+      "ts": [
+        "ts/test/credentials.test.ts"
+      ],
+      "ported": "3a4e5c14873eb5b32f182d55c68da98ac8c0db45"
+    },
+    "tests/test_fsutil.py": {
+      "ts": [
+        "ts/test/fsutil.test.ts"
+      ],
+      "ported": "3a4e5c14873eb5b32f182d55c68da98ac8c0db45"
+    },
+    "tests/test_json_output.py": {
+      "ts": [
+        "ts/test/json_output.test.ts"
+      ],
+      "ported": "3a4e5c14873eb5b32f182d55c68da98ac8c0db45"
+    },
+    "tests/test_launch_agent.py": {
+      "ts": [
+        "ts/test/launch_agent.test.ts"
+      ],
+      "ported": "3a4e5c14873eb5b32f182d55c68da98ac8c0db45"
+    },
+    "tests/test_locking.py": {
+      "ts": [
+        "ts/test/locking.test.ts"
+      ],
+      "ported": "3a4e5c14873eb5b32f182d55c68da98ac8c0db45"
+    },
+    "tests/test_logging_config.py": {
+      "ts": [
+        "ts/test/logging_config.test.ts"
+      ],
+      "ported": "3a4e5c14873eb5b32f182d55c68da98ac8c0db45"
+    },
+    "tests/test_macos_keychain_contract.py": {
+      "ts": [
+        "ts/test/macos_keychain_contract.test.ts"
+      ],
+      "ported": "3a4e5c14873eb5b32f182d55c68da98ac8c0db45"
+    },
+    "tests/test_macos_keychain.py": {
+      "ts": [
+        "ts/test/macos_keychain.test.ts"
+      ],
+      "ported": "3a4e5c14873eb5b32f182d55c68da98ac8c0db45"
+    },
+    "tests/test_mappings.py": {
+      "ts": [
+        "ts/test/mappings.test.ts"
+      ],
+      "ported": "3a4e5c14873eb5b32f182d55c68da98ac8c0db45"
+    },
+    "tests/test_menubar.py": {
+      "ts": [
+        "menubar/Tests/CswapMenuBarCoreTests"
+      ],
+      "ported": null
+    },
+    "tests/test_migrations.py": {
+      "ts": [
+        "ts/test/migrations.test.ts"
+      ],
+      "ported": "3a4e5c14873eb5b32f182d55c68da98ac8c0db45"
+    },
+    "tests/test_move_accounts.py": {
+      "ts": [
+        "ts/test/move_accounts.test.ts"
+      ],
+      "ported": "3a4e5c14873eb5b32f182d55c68da98ac8c0db45"
+    },
+    "tests/test_oauth.py": {
+      "ts": [
+        "ts/test/oauth.test.ts"
+      ],
+      "ported": "3a4e5c14873eb5b32f182d55c68da98ac8c0db45"
+    },
+    "tests/test_pace.py": {
+      "ts": [
+        "ts/test/pace.test.ts"
+      ],
+      "ported": "3a4e5c14873eb5b32f182d55c68da98ac8c0db45"
+    },
+    "tests/test_paths.py": {
+      "ts": [
+        "ts/test/paths.test.ts"
+      ],
+      "ported": "3a4e5c14873eb5b32f182d55c68da98ac8c0db45"
+    },
+    "tests/test_poll_policy.py": {
+      "ts": [
+        "ts/test/poll_policy.test.ts"
+      ],
+      "ported": "3a4e5c14873eb5b32f182d55c68da98ac8c0db45"
+    },
+    "tests/test_printer.py": {
+      "ts": [
+        "ts/test/printer.test.ts"
+      ],
+      "ported": "3a4e5c14873eb5b32f182d55c68da98ac8c0db45"
+    },
+    "tests/test_process_detection.py": {
+      "ts": [
+        "ts/test/process_detection.test.ts"
+      ],
+      "ported": "3a4e5c14873eb5b32f182d55c68da98ac8c0db45"
+    },
+    "tests/test_real_store_guard.py": {
+      "ts": [
+        "ts/test/real_store_guard.test.ts"
+      ],
+      "ported": "3a4e5c14873eb5b32f182d55c68da98ac8c0db45"
+    },
+    "tests/test_session.py": {
+      "ts": [
+        "ts/test/session.test.ts"
+      ],
+      "ported": "3a4e5c14873eb5b32f182d55c68da98ac8c0db45"
+    },
+    "tests/test_settings.py": {
+      "ts": [
+        "ts/test/settings.test.ts"
+      ],
+      "ported": "3a4e5c14873eb5b32f182d55c68da98ac8c0db45"
+    },
+    "tests/test_swap_accounts.py": {
+      "ts": [
+        "ts/test/swap_accounts.test.ts"
+      ],
+      "ported": "3a4e5c14873eb5b32f182d55c68da98ac8c0db45"
+    },
+    "tests/test_switcher.py": {
+      "ts": [
+        "ts/test/switcher.1.test.ts",
+        "ts/test/switcher.2.test.ts",
+        "ts/test/switcher.3.test.ts",
+        "ts/test/switcher.4.test.ts",
+        "ts/test/switcher.5.test.ts",
+        "ts/test/switcher.6.test.ts"
+      ],
+      "ported": "3a4e5c14873eb5b32f182d55c68da98ac8c0db45"
+    },
+    "tests/test_theme.py": {
+      "ts": [
+        "ts/test/theme.test.ts"
+      ],
+      "ported": null
+    },
+    "tests/test_transfer.py": {
+      "ts": [
+        "ts/test/transfer.test.ts"
+      ],
+      "ported": "3a4e5c14873eb5b32f182d55c68da98ac8c0db45"
+    },
+    "tests/test_tui.py": {
+      "ts": [
+        "ts/test/tui.test.tsx"
+      ],
+      "ported": null
+    },
+    "tests/test_update_check.py": {
+      "ts": [
+        "ts/test/update_check.test.ts"
+      ],
+      "ported": "3a4e5c14873eb5b32f182d55c68da98ac8c0db45"
+    },
+    "tests/test_usage_store.py": {
+      "ts": [
+        "ts/test/usage_store.test.ts"
+      ],
+      "ported": "3a4e5c14873eb5b32f182d55c68da98ac8c0db45"
+    }
+  }
+}
