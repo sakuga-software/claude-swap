@@ -189,7 +189,8 @@ Keep this list current. A port that adds a difference adds a line here.
 
 ### Distribution
 
-- The npm package is `@sakuga-software/claude-swap`. It is not published yet.
+- The npm package is `@sakuga-software/claude-swap`. Pre-releases go to the
+  `beta` tag. See the Release section of `README.md`.
 - `cswap upgrade` runs `npm i -g` or `pnpm add -g`. The update check caches
   in `update_check_npm.json`, apart from the Python `update_check.json`.
 - The package exposes the CLI only. `src/index.ts` is not a build entry.

@@ -3,6 +3,18 @@
   "version": "0.27.0-beta.1",
   "description": "Multi-account switcher for Claude Code (TypeScript port)",
   "license": "MIT",
+  "author": "Sakuga Software",
+  "contributors": [
+    "Onur Cetinkol <onurcetinkol@gmail.com> (author of the original Python claude-swap)"
+  ],
+  "homepage": "https://github.com/sakuga-software/claude-swap/tree/main/ts#readme",
+  "bugs": "https://github.com/sakuga-software/claude-swap/issues",
+  "keywords": [
+    "claude",
+    "claude-code",
+    "account-switcher",
+    "cli"
+  ],
   "type": "module",
   "bin": {
     "cswap": "dist/cli.js",
@@ -14,6 +26,9 @@
   "engines": {
     "node": ">=22.15"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "packageManager": "pnpm@11.17.0",
   "scripts": {
     "build": "tsup",
@@ -22,7 +37,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "upstream:status": "tsx scripts/upstream-status.ts",
-    "upstream:mark": "tsx scripts/upstream-mark.ts"
+    "upstream:mark": "tsx scripts/upstream-mark.ts",
+    "prepack": "pnpm build"
   },
   "repository": {
     "type": "git",
