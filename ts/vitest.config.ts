@@ -13,5 +13,7 @@ export default defineConfig({
     unstubEnvs: true,
     restoreMocks: true,
     pool: "forks",
+    // A hosted Windows runner needs more than the default 5 s for the tests that take file locks.
+    testTimeout: 30_000,
   },
 });
