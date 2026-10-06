@@ -1,13 +1,8 @@
-import fs from "node:fs";
-import path from "node:path";
 import { describe, expect, it, vi } from "vitest";
 import {
   AllExhaustedEvent,
-  type AutoSwitchEvent,
-  AutoSwitchEngine,
   NoSwitchEvent,
   PollEvent,
-  STATE_FILENAME,
   SwitchEvent,
   TickOutcome,
   pctLabel,
@@ -15,116 +10,13 @@ import {
 import { USAGE_TOKEN_EXPIRED } from "../src/json_output.js";
 import { Platform, accountSnapshot } from "../src/models.js";
 import { EXHAUSTED_INTERVAL_S } from "../src/poll_policy.js";
-import { autoSwitchSettings, type AutoSwitchSettings } from "../src/settings.js";
+import type { AutoSwitchSettings } from "../src/settings.js";
 import { SnapshotSource } from "../src/snapshot_source.js";
-import { ClaudeAccountSwitcher } from "../src/switcher.js";
 import { UsageEntry } from "../src/usage_store.js";
-import { testHome } from "./helpers/home.js";
-
-type Usage = Record<string, unknown> | string | null;
-
-function usage(pct: number, resetsAt?: string): Record<string, unknown> {
-  const window: Record<string, unknown> = { pct };
-  if (resetsAt) window.resets_at = resetsAt;
-  return { five_hour: window, seven_day: { pct: 0.0 } };
-}
-
-function entryFor(value: Usage, now: number): UsageEntry {
-  if (typeof value === "string") return new UsageEntry({ sentinel: value });
-  if (value) return new UsageEntry({ lastGood: value, fetchedAt: now, ageS: 0.0 });
-  return new UsageEntry();
-}
-
-/** A seeded switcher on the Linux file backend, an engine on a fake clock, and the captured events. */
-class EngineHarness {
-  switcher: ClaudeAccountSwitcher;
-  settings: AutoSwitchSettings;
-  events: AutoSwitchEvent[] = [];
-  now = 1_000_000.0;
-  engine: AutoSwitchEngine;
-
-  constructor(settings: Partial<AutoSwitchSettings> = {}) {
-    this.switcher = new ClaudeAccountSwitcher();
-    this.switcher.platform = Platform.LINUX;
-    this.switcher.setupDirectories();
-    this.switcher.initSequenceFile();
-    this.switcher.usageStore.clock = () => this.now;
-    this.settings = autoSwitchSettings(settings);
-    this.engine = new AutoSwitchEngine(this.switcher, this.settings, (e) => this.events.push(e), {
-      clock: () => this.now,
-    });
-  }
-
-  seed(num: number, email: string): void {
-    const creds = JSON.stringify({ claudeAiOauth: { accessToken: `sk-${num}`, refreshToken: `rt-${num}` } });
-    this.switcher.writeAccountCredentials(String(num), email, creds);
-    this.switcher.writeAccountConfig(
-      String(num),
-      email,
-      JSON.stringify({ oauthAccount: { emailAddress: email, accountUuid: `uuid-${num}` } }),
-    );
-    const data = this.switcher.getSequenceData()!;
-    data.accounts ??= {};
-    data.sequence ??= [];
-    data.accounts[String(num)] = {
-      email,
-      uuid: `uuid-${num}`,
-      organizationUuid: "",
-      organizationName: "",
-      added: "2024-01-01T00:00:00Z",
-    };
-    if (!data.sequence.includes(num)) {
-      data.sequence.push(num);
-      data.sequence.sort((a, b) => a - b);
-    }
-    if (data.activeAccountNumber === null) data.activeAccountNumber = num;
-    this.switcher.writeJson(this.switcher.sequenceFile, data);
-  }
-
-  makeLive(email: string, num: number): void {
-    const home = testHome();
-    fs.writeFileSync(
-      path.join(home, ".claude", ".credentials.json"),
-      JSON.stringify({ claudeAiOauth: { accessToken: "sk-live", refreshToken: "rt-live" } }),
-    );
-    fs.writeFileSync(
-      path.join(home, ".claude.json"),
-      JSON.stringify({ oauthAccount: { emailAddress: email, accountUuid: `uuid-${num}` } }),
-    );
-  }
-
-  async tickWithUsage(values: Record<string, Usage>): Promise<TickOutcome> {
-    const entries: Record<string, UsageEntry> = {};
-    for (const [num, value] of Object.entries(values)) entries[num] = entryFor(value, this.now);
-    const spy = vi.spyOn(this.switcher, "usageEntriesByAccount").mockResolvedValue(entries);
-    try {
-      return await this.engine.tick();
-    } finally {
-      spy.mockRestore();
-    }
-  }
-
-  activeNumber(): number | null {
-    return this.switcher.getSequenceData()!.activeAccountNumber as number | null;
-  }
-
-  reasons(): string[] {
-    return this.events.filter((e) => e instanceof NoSwitchEvent).map((e) => (e as NoSwitchEvent).reason);
-  }
-
-  state(): Record<string, unknown> {
-    const file = path.join(this.switcher.backupDir, STATE_FILENAME);
-    return fs.existsSync(file) ? (JSON.parse(fs.readFileSync(file, "utf8")) as Record<string, unknown>) : {};
-  }
-}
+import { EngineHarness, makeHarness, usage } from "./helpers/autoswitch_harness.js";
 
 function harness(settings: Partial<AutoSwitchSettings> = {}): EngineHarness {
-  const h = new EngineHarness(settings);
-  h.seed(1, "a@example.com");
-  h.seed(2, "b@example.com");
-  h.seed(3, "c@example.com");
-  h.makeLive("a@example.com", 1);
-  return h;
+  return makeHarness(settings);
 }
 
 describe("AutoSwitchEngineSmoke", () => {
@@ -162,7 +54,7 @@ describe("AutoSwitchEngineSmoke", () => {
     expect(state.leftHeadroom).toBe(5);
 
     // The cooldown stops the next proactive move.
-    h.now += 60;
+    h.clock.advance(60);
     expect(await h.tickWithUsage({ "3": usage(95), "1": usage(10), "2": usage(10) })).toBe(TickOutcome.NO_ACTION);
     expect(h.reasons()).toEqual(["cooldown"]);
   });
@@ -178,7 +70,7 @@ describe("AutoSwitchEngineSmoke", () => {
 
   it("all_exhausted_sleeps_toward_the_reset", async () => {
     const h = harness();
-    const reset = new Date((h.now + 1800) * 1000).toISOString().replace(".000Z", "Z");
+    const reset = new Date((h.clock.now + 1800) * 1000).toISOString().replace(".000Z", "Z");
     const outcome = await h.tickWithUsage({
       "1": usage(100, reset),
       "2": usage(100, reset),
@@ -188,7 +80,7 @@ describe("AutoSwitchEngineSmoke", () => {
     const exhausted = h.events.find((e) => e instanceof AllExhaustedEvent) as AllExhaustedEvent;
     expect(exhausted.earliestResetAt).toBe(reset);
     expect(h.engine.blockedWaitLong).toBe(true);
-    expect(h.engine.sleepUntilTs).toBe(h.now + 1800 + 60);
+    expect(h.engine.sleepUntilTs).toBe(h.clock.now + 1800 + 60);
     expect(await h.engine.nextDelay(outcome)).toBe(EXHAUSTED_INTERVAL_S);
   });
 

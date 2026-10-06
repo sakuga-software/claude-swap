@@ -22,32 +22,32 @@
       "ts": [
         ".github/workflows/ts-ci.yml"
       ],
-      "ported": null
+      "ported": "3a4e5c14873eb5b32f182d55c68da98ac8c0db45"
     },
     "pyproject.toml": {
       "ts": [
         "ts/package.json"
       ],
-      "ported": null
+      "ported": "3a4e5c14873eb5b32f182d55c68da98ac8c0db45"
     },
     "README.md": {
       "ts": [
         "ts/README.md"
       ],
-      "ported": null
+      "ported": "3a4e5c14873eb5b32f182d55c68da98ac8c0db45"
     },
     "src/claude_swap/__init__.py": {
       "ts": [
         "ts/src/index.ts",
         "ts/src/version.ts"
       ],
-      "ported": null
+      "ported": "3a4e5c14873eb5b32f182d55c68da98ac8c0db45"
     },
     "src/claude_swap/__main__.py": {
       "ts": [
         "ts/src/main.ts"
       ],
-      "ported": null
+      "ported": "3a4e5c14873eb5b32f182d55c68da98ac8c0db45"
     },
     "src/claude_swap/appearance.py": {
       "ts": [
@@ -59,7 +59,7 @@
       "ts": [
         "ts/src/autoswitch.ts"
       ],
-      "ported": null
+      "ported": "3a4e5c14873eb5b32f182d55c68da98ac8c0db45"
     },
     "src/claude_swap/cache.py": {
       "ts": [
@@ -77,7 +77,7 @@
       "ts": [
         "ts/src/cli.ts"
       ],
-      "ported": null
+      "ported": "3a4e5c14873eb5b32f182d55c68da98ac8c0db45"
     },
     "src/claude_swap/credentials.py": {
       "ts": [
@@ -139,7 +139,7 @@
         "menubar/Sources/CswapMenuBar",
         "ts/src/menubar.ts"
       ],
-      "ported": null
+      "ported": "3a4e5c14873eb5b32f182d55c68da98ac8c0db45"
     },
     "src/claude_swap/migrations.py": {
       "ts": [
@@ -205,7 +205,7 @@
       "ts": [
         "ts/src/snapshot_source.ts"
       ],
-      "ported": null
+      "ported": "3a4e5c14873eb5b32f182d55c68da98ac8c0db45"
     },
     "src/claude_swap/switcher.py": {
       "ts": [
@@ -224,55 +224,55 @@
       "ts": [
         "ts/src/tui/index.tsx"
       ],
-      "ported": null
+      "ported": "3a4e5c14873eb5b32f182d55c68da98ac8c0db45"
     },
     "src/claude_swap/tui/app.py": {
       "ts": [
         "ts/src/tui/app.tsx"
       ],
-      "ported": null
+      "ported": "3a4e5c14873eb5b32f182d55c68da98ac8c0db45"
     },
     "src/claude_swap/tui/autoview.py": {
       "ts": [
         "ts/src/tui/autoview.tsx"
       ],
-      "ported": null
+      "ported": "3a4e5c14873eb5b32f182d55c68da98ac8c0db45"
     },
     "src/claude_swap/tui/cswap.tcss": {
       "ts": [
         "ts/src/tui/theme.ts"
       ],
-      "ported": null
+      "ported": "3a4e5c14873eb5b32f182d55c68da98ac8c0db45"
     },
     "src/claude_swap/tui/dashboard.py": {
       "ts": [
         "ts/src/tui/dashboard.tsx"
       ],
-      "ported": null
+      "ported": "3a4e5c14873eb5b32f182d55c68da98ac8c0db45"
     },
     "src/claude_swap/tui/data.py": {
       "ts": [
-        "ts/src/tui/data.tsx"
+        "ts/src/tui/data.ts"
       ],
-      "ported": null
+      "ported": "3a4e5c14873eb5b32f182d55c68da98ac8c0db45"
     },
     "src/claude_swap/tui/modals.py": {
       "ts": [
         "ts/src/tui/modals.tsx"
       ],
-      "ported": null
+      "ported": "3a4e5c14873eb5b32f182d55c68da98ac8c0db45"
     },
     "src/claude_swap/tui/theme.py": {
       "ts": [
-        "ts/src/tui/theme.tsx"
+        "ts/src/tui/theme.ts"
       ],
-      "ported": null
+      "ported": "3a4e5c14873eb5b32f182d55c68da98ac8c0db45"
     },
     "src/claude_swap/tui/widgets.py": {
       "ts": [
         "ts/src/tui/widgets.tsx"
       ],
-      "ported": null
+      "ported": "3a4e5c14873eb5b32f182d55c68da98ac8c0db45"
     },
     "src/claude_swap/update_check.py": {
       "ts": [
@@ -297,7 +297,7 @@
       "ts": [
         "ts/test/fixtures/sample_config.json"
       ],
-      "ported": null
+      "ported": "3a4e5c14873eb5b32f182d55c68da98ac8c0db45"
     },
     "tests/test_add_account_identity.py": {
       "ts": [
@@ -319,9 +319,12 @@
     },
     "tests/test_autoswitch.py": {
       "ts": [
-        "ts/test/autoswitch.test.ts"
+        "ts/test/autoswitch.1.test.ts",
+        "ts/test/autoswitch.2.test.ts",
+        "ts/test/autoswitch.3.test.ts",
+        "ts/test/autoswitch.4.test.ts"
       ],
-      "ported": null
+      "ported": "3a4e5c14873eb5b32f182d55c68da98ac8c0db45"
     },
     "tests/test_cache.py": {
       "ts": [
@@ -339,7 +342,7 @@
       "ts": [
         "ts/test/cli.test.ts"
       ],
-      "ported": null
+      "ported": "3a4e5c14873eb5b32f182d55c68da98ac8c0db45"
     },
     "tests/test_colour_cache_isolation.py": {
       "ts": [
@@ -351,7 +354,7 @@
       "ts": [
         "ts/test/config_cli.test.ts"
       ],
-      "ported": null
+      "ported": "3a4e5c14873eb5b32f182d55c68da98ac8c0db45"
     },
     "tests/test_credentials.py": {
       "ts": [
@@ -411,7 +414,7 @@
       "ts": [
         "menubar/Tests/CswapMenuBarCoreTests"
       ],
-      "ported": null
+      "ported": "3a4e5c14873eb5b32f182d55c68da98ac8c0db45"
     },
     "tests/test_migrations.py": {
       "ts": [
@@ -500,7 +503,7 @@
       "ts": [
         "ts/test/theme.test.ts"
       ],
-      "ported": null
+      "ported": "3a4e5c14873eb5b32f182d55c68da98ac8c0db45"
     },
     "tests/test_transfer.py": {
       "ts": [
@@ -512,7 +515,7 @@
       "ts": [
         "ts/test/tui.test.tsx"
       ],
-      "ported": null
+      "ported": "3a4e5c14873eb5b32f182d55c68da98ac8c0db45"
     },
     "tests/test_update_check.py": {
       "ts": [
